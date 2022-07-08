@@ -1,0 +1,169 @@
+<app-header></app-header>
+<app-sidemenu></app-sidemenu>
+<div class="app sidebar-mini">
+    <div class="page">
+        <div class="page-main" [class.opacity-2]="viewBox" [class.opacity-10]="!viewBox">
+            <div class="app-content">
+                <div class="side-app">
+                    <div class="page-header ">
+                        <h4 class="page-title mx-auto">Equipments Details</h4>
+                    </div>
+                    <div class="card">
+                        <div class="card-header-1">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="card-title">
+                                        <button class="btn btn-success create-btn-radius" routerLink="/equipments-details"><i class="fa fa-plus-circle icon-space" aria-hidden="true"></i>Create equipments</button>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-none">
+                                        <form class="search-bar search-server">
+                                            <div class=" has-search">
+                                                <span class="fa fa-search form-control-feedback"></span>
+                                                <input [formControl]="searchField" type="text" class="form-control" placeholder="Search with Flavour">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card"  *ngIf="blogList.length != 0">
+                                <div class="card-header">
+                                    <div class="card-title">List of Equipments - ( {{blogList.length}} )</div>
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered text-nowrap w-100 text-center align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th class="wd-15p">S.No</th>
+                                                    <th class="wd-15p">Equipments</th>
+                                                    <th class="wd-15p">Image</th>
+                                                    <th class="wd-15p">Status</th>
+                                                    <th class="wd-15p">Edit</th>
+                                                    <!-- <th class="wd-15p">View</th> -->
+                                                    <th class="wd-15p">Delete</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let blog of blogList| paginate: { itemsPerPage: 20, currentPage: sno };let i = index">
+                                                    <td>{{(i+1) + ((sno-1) * 20)}}</td>
+                                                    <td  class="homebannernamelabel">{{blog.equipments_header  }}</td>
+
+                                                
+                                                    <!-- <td>{{blog.equipments_header .length > 30 ? (blog.blog_heading | slice:0:25) + "..." : blog.blog_heading }}</td> -->
+                                                    <td>
+                                                        <button class="btn  btn-success" (click)="openModalBox(blog.id,blog.equipments_header, blog.equipments_content,blog.equipments_image, 'image')"><i class="fa fa-pencil-square-o fa-1x mobile-icon"></i><span class="window-text">Image </span></button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button"  class="btn btn-success btn-banner btn-radius waves-effect waves-light m-1" *ngIf="blog.active_status == 0" (click)="activateSpotlight(blog.id)"><i class="fa fa-check-circle mobile-icon"></i><span class="window-text">Activate</span></button>
+                                                        <button type="button" class="btn btn-danger btn-banner btn-radius waves-effect waves-light m-1" *ngIf="blog.active_status == 1" (click)="deActivateSpotlight(blog.id)"> <i class="fa fa-times-circle mobile-icon"></i><span class="window-text">De-Activate</span></button>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn  btn-success" [routerLink]="['/equipments-details', blog.id]"><i class="fa fa-pencil-square-o fa-1x mobile-icon" ></i><span class="window-text">Edit</span>
+                                </button>
+                                                    </td>
+                                                   <!--  <td>
+                                                        <button class="btn btn-info" (click)="openModalBox(blog.id,blog.blog_date, blog.author_name, blog.blog_heading, blog.blog_content , blog.blog_details_banner, 'view')"><i class="fa fa-pencil-square-o fa-1x mobile-icon" ></i><span class="window-text">View</span>
+                                </button>
+                                                    </td> -->
+                                                    <td>
+                                                        <button class="btn btn-server btn-danger" (click)="deleteBlog(blog.id)"><i class="fa fa-trash-o fa-1x mobile-icon"></i> <span class="window-text">Delete</span></button>
+                                                    </td>
+
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <pagination-controls *ngIf="blogList.length > 20" (pageChange)="sno = $event"></pagination-controls>
+                                    <div class="modal" id="formmodal" [class.d-block]="showPopup" [class.d-none]="!showPopup">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content border-success animated" [class.swing]="errorMsg.length === 0" [class.shake]="errorMsg.length !== 0">
+                                                <div class="modal-header bg-success">
+                                                    <h5 class="modal-title text-white">{{modalBoxName}} equipments</h5>
+                                                    <button id="closeModal" type="button" class="close text-white" (click)="popUpClose()" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                              </button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                   <!--  <form autocomplete="off" *ngIf="modalBoxName === 'View'">
+
+                                                        <div class="form-group">
+
+                                                            <label class="viewtitle">Logo</label>
+                                                            <div class="form-group d-flex justify-content-center">
+                                                                <img [src]="BlogProfileImage" class="w-80 scale-bottom" style="height:15em" />
+                                                            </div>
+
+                                                                                                                        
+                                                            <label class="viewtitle">Title</label>
+                                                            <div class="form-group">
+                                                                <p>{{viewName}}</p>
+                                                            </div>
+
+
+                                                            <label class="viewtitle">Designation</label>
+                                                            <div class="form-group">
+                                                                <p>{{viewDesignation}}</p>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </form> -->
+                                                    <form autocomplete="off" *ngIf="modalBoxName === 'Image'">
+                                                        <label class="homebannernamelabel  d-flex flex-column justify-content-start  align-items-center">Upload Image</label>
+                                                        <div class="form-group">
+                                                            <app-sub-category-image  (closePopUp)="popUpClose()" [id]="blogID" [data]="'equipments_image'"></app-sub-category-image>
+
+                                                        </div>
+                                                    </form>
+
+
+
+                                                </div>
+                                                <!-- <div class="modal-footer">
+                                                    <button type="button" tabindex="-1" class="btn btn-danger" (click)="popUpClose()" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal" tabindex="-1" role="dialog" [class.d-block]="show" [class.d-none]="!show" style=" z-index: 1000000; ">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="border: 2px solid #ffdf06;">
+                        <div class="modal-header">
+                            <!-- <h5 class="modal-title" id="exampleModalLabel">ATTENTION</h5> -->
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closepopup()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+                        </div>
+                        <div class="modal-body" style="color: black; font-size: large; height: 5em; z-index: 10000;">
+                            Maximum Length of Card Description is "340" Letters
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <app-footer></app-footer>
+        </div>
+    </div>
+</div>

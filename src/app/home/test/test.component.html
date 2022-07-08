@@ -1,0 +1,73 @@
+<app-header></app-header>
+<app-sidemenu></app-sidemenu>
+<div class="app sidebar-mini">
+    <div class="page">
+        <div class="page-main" [class.opacity-2]="viewBox" [class.opacity-10]="!viewBox">
+            <div class="app-content">
+                <div class="side-app">
+
+                    <div class="page-header">
+                        <h4 class="page-title">Test Banner Image</h4>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <form autocomplete="off">
+                                        <div class="row">
+                                            <div class="form-group col-6 mx-auto">
+                                                <label class="homebannernamelabel">Upload Image</label>
+                                                <app-sub-category-image  (refreshCurrentData)="getsTestDetails()" [data]="'test_image'"></app-sub-category-image>
+                                            </div>
+                                            <div class="form-group col-6 mx-auto d-flex flex-column ">
+                                                <label class="homebannernamelabel">Test Banner</label>
+                                                <img [src]="SpotLightBanner" class="w-80 scale-bottom" />
+                                            </div>
+
+                                            <hr>
+
+                                            <div class="row">
+                                                <div class="form-group col-6 mx-auto d-flex flex-column">
+                                                    <label class="homebannernamelabel">Test Header </label>
+                                                    <input type="text" [placeholder]="'Enter text here...'" [(ngModel)]="header" [ngModelOptions]="{ standalone: true }">
+
+                                                </div>
+
+                                               <!--  <div class="form-group col-6 mx-auto d-flex flex-column">
+                                                    <label class="homebannernamelabel">Spot Light Date  </label>
+                                                    <input type="date" [placeholder]="'Enter text here...'" [(ngModel)]="header_date" [ngModelOptions]="{ standalone: true }">
+                                                </div> -->
+
+                                                <div class="form-group col-12 mx-auto d-flex flex-column">
+                                                    <label class="homebannernamelabel">Test Content</label>
+                                                    <textarea class="border border-dark w-100" rows="4" [placeholder]="'Enter text here...'" [(ngModel)]="header_Content" [ngModelOptions]="{ standalone: true }"></textarea>
+                                                </div>
+
+                                                <div class="form-group col-12 mx-auto d-flex flex-column">
+                                                    <label class="homebannernamelabel">Test points</label>
+                                                    <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="header_details_Content" [ngModelOptions]="{standalone: true}"></angular-editor>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-5 mt-5">
+                                                <button class="btn btn-success btn-server rounded mx-auto" (click)="updatespotlight()">Update</button>
+                                            </div>
+
+
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <app-footer></app-footer>
+        </div>
+    </div>
+</div>
